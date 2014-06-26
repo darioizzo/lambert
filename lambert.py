@@ -175,7 +175,7 @@ def plotx(lam,N=0,logplot=False,linestyle='k',minval=-0.99,maxval=3.0):
 	elif not logplot:
 		pl.plot(axes,T,linestyle)
 		pl.xlim((-1,2.0))
-		pl.ylim((0,10))
+		pl.ylim((0,20))
 	pl.show()
 
 def plot_x_curves(lam,N=0,logplot=False,minval=-0.99,maxval=3.0):
@@ -300,11 +300,11 @@ def make_starter_plot():
 	plot_x_curves([-1,-0.85,0.85,1],N=0,logplot=False,maxval=10,minval=-0.9)
 	T0s = [pi,pi/2,1.1]
 	for T0 in T0s:
-		T  =linspace(T0,3*pi)
+		T  =linspace(T0,10*pi)
 		pl.plot((T0/T)**(2.0/3.0)-1.0,T,':k')
 		T  =linspace(0.1,T0)
 		pl.plot((T0/T)**(1.0)-1.0,T,':k')
-	pl.plot([],'k-',label="tof urves [-1,-0.85,0.85,1]")
+	pl.plot([],'k-',label="tof curves [-1,-0.85,0.85,1]")
 	pl.plot([],'k:',label="initial guesses")
 	pl.legend()
 	pl.annotate(r'$$\lambda \le -0.85$$', xy=(-0.4, 7.5), xytext=(-0.1, 8),
@@ -417,7 +417,6 @@ def householder(T,x0,lam,N=0,eps=1e-13, iter_max = 3):
 		DT2 = DT*DT
 		xnew = xold - delta * (DT2-delta*DDT/2.0) / (DT*(DT2-delta*DDT) + DDDT*delta*delta/6.0)
 		err=abs(xold-xnew)
-		sdfsd
 		xold=xnew
 		it=it+1
 		
@@ -552,9 +551,11 @@ def my_guess(lam,T,N=0):
 		T1 = 2.0/3.0*(1-lam**3.0)
 		log2 = log(2)
 		if T>T0:
-			return (T0/T)**(2.0/3.0) - 1
+			#return (T0/T)**(2.0/3.0) - 1
+			return -(T-T0)/(T-T0+4)
 		elif T<T1:
-			return 2*(T1/T) - 1
+			#return 2*(T1/T) - 1
+			return T1*(T1-T) / ( 2.0/5.0*(1-lam**5) * T ) + 1
 		else:	
 			return (T/T0)**(log2/ log(T1/T0)) - 1
 	elif N>0:
